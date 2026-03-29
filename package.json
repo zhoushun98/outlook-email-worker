@@ -1,0 +1,17 @@
+{
+  "name": "outlook-email-worker",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:create": "wrangler d1 create outlook-emails",
+    "db:migrate:local": "wrangler d1 migrations apply outlook-emails --local",
+    "db:migrate:remote": "wrangler d1 migrations apply outlook-emails --remote"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4",
+    "typescript": "^5",
+    "wrangler": "^3"
+  }
+}
