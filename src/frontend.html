@@ -380,11 +380,11 @@
         .group-actions {
             display: flex;
             gap: 5px;
-            padding: 3px;
-            border-radius: 10px;
-            background: rgba(248, 250, 252, 0.94);
-            border: 1px solid var(--border);
-            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+            padding: 0;
+            border-radius: 0;
+            background: transparent;
+            border: 0;
+            box-shadow: none;
             opacity: 0;
             transition: opacity 0.2s ease;
         }
@@ -1550,9 +1550,7 @@
         }
 
         .group-actions {
-            border-color: var(--border);
-            background: color-mix(in srgb, var(--surface) 88%, transparent);
-            backdrop-filter: blur(6px);
+            backdrop-filter: none;
         }
 
         .account-actions {
