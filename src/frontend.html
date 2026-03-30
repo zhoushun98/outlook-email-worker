@@ -639,6 +639,10 @@
             min-height: 0;
         }
 
+        .content-area.list-hidden {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
         .email-list-panel,
         .email-detail-panel {
             min-width: 0;
@@ -2263,6 +2267,12 @@
             return window.matchMedia('(max-width: 768px)').matches;
         }
 
+        function updateContentAreaLayout() {
+            var contentArea = document.querySelector('.content-area');
+            if (!contentArea) return;
+            contentArea.classList.toggle('list-hidden', !isListVisible && !isMobileViewport());
+        }
+
         function getResolvedTheme() {
             if (themePreference === 'system') {
                 return systemThemeQuery.matches ? 'dark' : 'light';
@@ -2360,8 +2370,12 @@
         function syncMobileStep() {
             if (!currentAccountEmail) {
                 document.getElementById('emailListPanel').classList.remove('hidden');
+                isListVisible = true;
+                document.getElementById('toggleListText').textContent = '隐藏列表';
                 document.getElementById('emailDetailToolbar').style.display = 'none';
             }
+
+            updateContentAreaLayout();
 
             if (!isMobileViewport()) {
                 document.body.setAttribute('data-mobile-step', 'emails');
@@ -2383,6 +2397,9 @@
 
         function goToGroupsStep() {
             document.getElementById('emailListPanel').classList.remove('hidden');
+            isListVisible = true;
+            document.getElementById('toggleListText').textContent = '隐藏列表';
+            updateContentAreaLayout();
             setMobileStep('groups');
         }
 
@@ -2392,6 +2409,9 @@
                 return;
             }
             document.getElementById('emailListPanel').classList.remove('hidden');
+            isListVisible = true;
+            document.getElementById('toggleListText').textContent = '隐藏列表';
+            updateContentAreaLayout();
             document.getElementById('emailDetailToolbar').style.display = 'none';
             setMobileStep('accounts');
         }
@@ -2900,16 +2920,21 @@
                 }
             });
 
-            document.getElementById('emailList').innerHTML = renderEmptyState('inbox', '点击“获取邮件”按钮获取邮件');
+            document.getElementById('emailList').innerHTML = '<div class="loading"><div class="loading-spinner"></div></div>';
             document.getElementById('emailDetail').innerHTML = renderEmptyState('email', '选择一封邮件查看详情');
             document.getElementById('emailDetailToolbar').style.display = 'none';
             document.getElementById('emailCount').textContent = '';
             document.getElementById('methodTag').style.display = 'none';
             document.getElementById('emailListPanel').classList.remove('hidden');
+            isListVisible = true;
+            document.getElementById('toggleListText').textContent = '隐藏列表';
+            updateContentAreaLayout();
 
             if (isMobileViewport()) {
                 setMobileStep('emails');
             }
+
+            loadEmails(email);
         }
 
         function showAddAccountModal() {
@@ -3398,17 +3423,20 @@
                 panel.classList.add('hidden');
                 toggleText.textContent = '显示列表';
             }
+            updateContentAreaLayout();
         }
 
         function showEmailList() {
             if (isMobileViewport()) {
                 document.getElementById('emailListPanel').classList.remove('hidden');
                 document.getElementById('emailDetailToolbar').style.display = 'none';
+                updateContentAreaLayout();
                 return;
             }
             document.getElementById('emailListPanel').classList.remove('hidden');
             isListVisible = true;
             document.getElementById('toggleListText').textContent = '隐藏列表';
+            updateContentAreaLayout();
         }
 
         function refreshEmails() {
